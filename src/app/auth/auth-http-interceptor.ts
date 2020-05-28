@@ -7,5 +7,19 @@ import {
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
-@Injectable({ providedIn: 'root' })
-export class AuthHttpInterceptor {}
+@Injectable()
+export class AuthHttpInterceptor implements HttpInterceptor {
+  intercept(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    // console.log('requests:', req);
+    // Modify or log the outgoing request
+    const modifiedReq = req.clone({
+      withCredentials: true,
+    });
+
+    // next.handle gives back an Observable
+    return next.handle(modifiedReq);
+  }
+}
